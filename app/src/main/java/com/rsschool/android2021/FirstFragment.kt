@@ -48,7 +48,7 @@ class FirstFragment : Fragment() {
 
         generateButton?.setOnClickListener {
             try {
-                if (max.text.toString().toInt() < min.text.toString().toInt()) {
+                if (max.text.toString().toInt() <= min.text.toString().toInt()) {
                     secondFragmentCommunicate.firstFragment(previousResult?.text.toString().toInt())
                     Toast.makeText(requireContext(), "Введите корректные данные", Toast.LENGTH_LONG).show()
                 }

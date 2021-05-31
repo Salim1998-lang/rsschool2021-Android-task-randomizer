@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity(), FirstFragmentCommunicate, SecondFragme
         val secondFragment: Fragment = SecondFragment.newInstance(min, max)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, secondFragment)
-        transaction.addToBackStack("second")
         transaction.commit()
     }
 
