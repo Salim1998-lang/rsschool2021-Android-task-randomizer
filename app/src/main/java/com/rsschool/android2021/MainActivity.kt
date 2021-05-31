@@ -1,29 +1,53 @@
-package com.rsschool.android2021;
+package com.rsschool.android2021
 
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.rsschool.android2021.FirstFragment.Companion.newInstance
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        openFirstFragment(0);
+class MainActivity : AppCompatActivity(), FirstFragmentCommunicate, SecondFragmentCommunicate{
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        openFirstFragment(0)
     }
 
-    private void openFirstFragment(int previousNumber) {
-        final Fragment firstFragment = FirstFragment.newInstance(previousNumber);
-        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, firstFragment);
-        // TODO: invoke function which apply changes of the transaction
+    private fun openFirstFragment(previousNumber: Int) {
+        val secondFragment: Fragment = newInstance(previousNumber)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, secondFragment)
+        transaction.commit()
     }
 
-    private void openSecondFragment(int min, int max) {
-        // TODO: implement it
+    private fun openSecondFragment(min: Int, max: Int) {
+        val secondFragment: Fragment = SecondFragment.newInstance(min, max)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, secondFragment)
+        transaction.addToBackStack("second")
+        transaction.commit()
+    }
+
+    override fun secondFragment(min: Int, max: Int) {
+        openSecondFragment(min, max)
+    }
+
+    override fun firstFragment(previousResult: Int) {
+        openFirstFragment(previousResult)
+    }
+
+    override fun onBackPressed() {
+        val fm = supportFragmentManager
+        val list = fm.fragments.toList()
+        var backPressedListener: OnBackClickInterface? = null
+        for (fragment in list) {
+            if (fragment is OnBackClickInterface) {
+                backPressedListener = fragment
+            }
+        }
+        if (backPressedListener is OnBackClickInterface) {
+            backPressedListener.onBackClicked()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

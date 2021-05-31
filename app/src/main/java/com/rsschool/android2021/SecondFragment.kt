@@ -1,5 +1,6 @@
 package com.rsschool.android2021
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,18 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-class SecondFragment : Fragment() {
+class SecondFragment : Fragment(), OnBackClickInterface {
 
+
+    private lateinit var secondFragmentCommunicate: SecondFragmentCommunicate
     private var backButton: Button? = null
-    private var result: TextView? = null
+    private lateinit var result: TextView
+    private var previous = 0
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        secondFragmentCommunicate = context as SecondFragmentCommunicate
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,16 +38,15 @@ class SecondFragment : Fragment() {
         val min = arguments?.getInt(MIN_VALUE_KEY) ?: 0
         val max = arguments?.getInt(MAX_VALUE_KEY) ?: 0
 
-        result?.text = generate(min, max).toString()
-
+        result.text = generate(min, max).toString()
+        previous = result.text.toString().toInt()
         backButton?.setOnClickListener {
-            // TODO: implement back
+            secondFragmentCommunicate.firstFragment(previous)
         }
     }
 
     private fun generate(min: Int, max: Int): Int {
-        // TODO: generate random number
-        return 0
+        return (min..max).random()
     }
 
     companion object {
@@ -47,13 +55,17 @@ class SecondFragment : Fragment() {
         fun newInstance(min: Int, max: Int): SecondFragment {
             val fragment = SecondFragment()
             val args = Bundle()
-
-            // TODO: implement adding arguments
-
+            args.putInt(MIN_VALUE_KEY, min)
+            args.putInt(MAX_VALUE_KEY, max)
+            fragment.arguments = args
             return fragment
         }
 
         private const val MIN_VALUE_KEY = "MIN_VALUE"
         private const val MAX_VALUE_KEY = "MAX_VALUE"
+    }
+
+    override fun onBackClicked() {
+        secondFragmentCommunicate.firstFragment(previous)
     }
 }
