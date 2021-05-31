@@ -41,7 +41,7 @@ class SecondFragment : Fragment(), OnBackClickInterface {
         result.text = generate(min, max).toString()
         previous = result.text.toString().toInt()
         backButton?.setOnClickListener {
-            secondFragmentCommunicate.firstFragment(previous)
+            secondFragmentCommunicate.openFF(previous)
         }
     }
 
@@ -66,6 +66,6 @@ class SecondFragment : Fragment(), OnBackClickInterface {
     }
 
     override fun onBackClicked() {
-        secondFragmentCommunicate.firstFragment(previous)
+        secondFragmentCommunicate.openFF(previous)
     }
 }
