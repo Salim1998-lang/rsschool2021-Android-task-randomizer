@@ -10,30 +10,23 @@ class MainActivity : AppCompatActivity(), FirstFragmentCommunicate, SecondFragme
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        openFirstFragment(0)
+        firstFragment(0)
     }
 
-    private fun openFirstFragment(previousNumber: Int) {
+    override fun firstFragment(previousNumber: Int) {
         val secondFragment: Fragment = newInstance(previousNumber)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, secondFragment)
         transaction.commit()
     }
 
-    private fun openSecondFragment(min: Int, max: Int) {
+    override fun secondFragment(min: Int, max: Int) {
         val secondFragment: Fragment = SecondFragment.newInstance(min, max)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, secondFragment)
         transaction.commit()
     }
 
-    override fun secondFragment(min: Int, max: Int) {
-        openSecondFragment(min, max)
-    }
-
-    override fun firstFragment(previousResult: Int) {
-        openFirstFragment(previousResult)
-    }
 
     override fun onBackPressed() {
         val fm = supportFragmentManager
