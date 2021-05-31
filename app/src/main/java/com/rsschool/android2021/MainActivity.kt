@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.rsschool.android2021.FirstFragment.Companion.newInstance
 
 class MainActivity : AppCompatActivity(), FirstFragmentCommunicate, SecondFragmentCommunicate{
+    private lateinit var onBackClickInterface: OnBackClickInterface
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,12 +38,7 @@ class MainActivity : AppCompatActivity(), FirstFragmentCommunicate, SecondFragme
     override fun onBackPressed() {
         val fm = supportFragmentManager
         val list = fm.fragments.toList()
-        var backPressedListener: OnBackClickInterface? = null
-        for (fragment in list) {
-            if (fragment is OnBackClickInterface) {
-                backPressedListener = fragment
-            }
-        }
+        val backPressedListener: Fragment? = list.find { it is OnBackClickInterface }
         if (backPressedListener is OnBackClickInterface) {
             backPressedListener.onBackClicked()
         } else {
